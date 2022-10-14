@@ -27,12 +27,10 @@ class MyWidget(QMainWindow):
 
     def new_text(self, text):
         self.position = text
-        # print(self.position)
 
     def search_competences(self):
         cur = self.con.cursor()
         val = cur.execute(f"SELECT name FROM jobs").fetchall()
-        print(val)
         val = [i[0] for i in val]
         if self.position in val:
             result = cur.execute(f'SELECT list FROM jobs WHERE name = "{self.position}"').fetchall()
@@ -52,18 +50,14 @@ class MyWidget(QMainWindow):
 
         val = cur.execute(f"SELECT comp FROM final").fetchall()
         val = [i[0] for i in val]
-        print(val)
-        print(self.item)
         if self.item in val:
             val = cur.execute(f'SELECT courses FROM final WHERE comp = "{self.item}"').fetchall()
             val = val[0][0].split('/')
-            print(val)
         self.lst_courses = val
         self.update_tableWidget()
 
     def update_tableWidget(self):
         if self.item != '':
-            print(len(self.lst_courses))
             self.tableWidget.setRowCount(len(self.lst_courses))
             for i, val in enumerate(self.lst_courses):
                 self.tableWidget.setItem(i, 0, QTableWidgetItem(str(val)))
